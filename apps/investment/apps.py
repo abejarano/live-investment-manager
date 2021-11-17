@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CryptoConfig(AppConfig):
+class InvestmentConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.crypto'
+    name = 'apps.investment'
