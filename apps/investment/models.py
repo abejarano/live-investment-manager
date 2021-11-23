@@ -5,6 +5,17 @@ from django.db import models
 from apps.crypto.models import Crypto
 
 
+class Capital(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    capital = models.DecimalField(max_digits=19, decimal_places=4)
+    created_at = models.DateTimeField(auto_created=True)
+
+    class Meta:
+        db_table = 'tb_capital'
+        verbose_name = 'Capital'
+        verbose_name_plural = 'Capitales'
+
+
 class Investment(models.Model):
     amount = models.DecimalField(max_digits=19, decimal_places=5, verbose_name='Monto invertido (USD)')
     amount_crypto = models.DecimalField(max_digits=19, decimal_places=8, verbose_name='Cantidad de cripto')
