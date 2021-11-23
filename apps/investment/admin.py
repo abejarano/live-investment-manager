@@ -1,6 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
+from django.contrib.auth.models import User
+
 from apps.investment.models import Investment
 
 
@@ -18,3 +20,7 @@ class AdminInvestment(admin.ModelAdmin):
 
          )
     ]
+
+    def save_model(self, request, obj, form, change):
+        obj.user = User.objects.get(username=request.user)
+        obj.save()
