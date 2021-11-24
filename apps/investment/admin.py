@@ -4,13 +4,15 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
+from apps.investment.forms import FormInvestment
 from apps.investment.models import Investment, Capital
 
 
 @admin.register(Investment)
 class AdminInvestment(admin.ModelAdmin):
-    list_display = ['crypto', 'price_crypto', 'amount', 'amount_crypto']
+    list_display = ['crypto', 'price_crypto', 'precio_actual', 'amount', 'amount_crypto', 'ROI']
     add_form_template = 'investment/form_add_investment.html'
+    form = FormInvestment
     fieldsets = [
         (None, {
             'fields': [

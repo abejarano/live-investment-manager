@@ -2,13 +2,15 @@ from django.contrib.auth.models import User
 from django.db import models
 
 # Create your models here.
+from django.utils.safestring import mark_safe
+
 from apps.crypto.models import Crypto
 
 
 class Capital(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     capital = models.DecimalField(max_digits=19, decimal_places=4)
-    created_at = models.DateTimeField(auto_created=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = 'tb_capital'
@@ -37,6 +39,19 @@ class Investment(models.Model):
         verbose_name='Inversor'
     )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de inversión')
+
+    def ROI(self):
+        current_balance = self.amount_crypto * self.crypto.price
+        roi = round(current_balance - self.amount, 2)
+
+        if roi < 0:
+            return mark_safe('<b style = "color: red">'+str(roi)+'</b>')
+
+        return mark_safe('<b style = "color: green">'+str(roi)+'</b>')
+
+    def precio_actual(self):
+        return str(self.crypto.price)
+
 
     class Meta:
         db_table = 'tb_investments'

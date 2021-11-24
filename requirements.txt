@@ -2,3 +2,4 @@ Django~=3.2.9
 redis
 celery
 django_celery_beat
+binance-connector
