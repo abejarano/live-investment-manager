@@ -4,3 +4,4 @@ celery
 django_celery_beat
 binance-connector
 django-admincharts
+python-decouple
