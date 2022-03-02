@@ -1,0 +1,33 @@
+stages:
+  - prepare
+  - deploy
+
+before_production:
+  stage: prepare
+  tags:
+    - production
+  only:
+    - master
+  script:
+    - cd /applications/investment-manager
+    - echo "$CREDENCIAL_DB_PRODUCCION" > "$(pwd)/.env"
+    - git fetch
+    - git checkout master
+    - git pull origin master
+
+
+after_production:
+  stage: deploy
+  tags:
+    - production
+  only:
+    - master
+  script:
+    - source /applications/VIRTUAL/bin/activate
+    - cd /applications/investment-manager
+    - pip install -r requirements.txt
+    # DB sync
+    - python manage.py makemigrations crypto investment
+    - python manage.py migrate
+    # Restart web server
+    - sudo systemctl restart investment-manager
