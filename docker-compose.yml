@@ -1,8 +1,60 @@
-version: '3.1'
+version: '3.8'
 services:
+  postgres:
+    restart: always
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: db_investment
+    volumes:
+      - pgdata:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+
   redis:
     image: redis
-    container_name: redis_crypto
+    restart: always
     ports:
       - "6379:6379"
+    volumes:
+      - redisdata:/var/lib/redis/data
+
+  investment:
     restart: always
+    build: .
+    env_file: .env
+    environment:
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_PASSWORD: sekret1
+      DJANGO_SUPERUSER_EMAIL: admin@example.com
+    command: /app/start-server.sh
+    volumes:
+      - web-django:/app
+      - web-static:/app/static
+    expose:
+      - "8000"
+    links:
+      - postgres:postgres
+      - redis:redis
+    depends_on:
+      - postgres
+      - redis
+
+  nginx:
+    restart: always
+    build: ./nginx/
+    ports:
+      - "80:80"
+    volumes:
+      - web-static:/app/static
+    links:
+      - investment:investment
+
+
+volumes:
+  postgres_data:
+  web-django:
+  web-static:
+  pgdata:
+  redisdata:

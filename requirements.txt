@@ -5,3 +5,5 @@ django_celery_beat
 binance-connector
 django-admincharts
 python-decouple
+psycopg2-binary
+gunicorn
