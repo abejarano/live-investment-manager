@@ -9,7 +9,7 @@ before_production:
   only:
     - master
   script:
-    - cd /applications/investment-manager
+    - cd /applications/live-investment-manager
     - echo "$CREDENCIAL_DB_PRODUCCION" > "$(pwd)/.env"
     - git fetch
     - git checkout master
@@ -23,8 +23,8 @@ after_production:
   only:
     - master
   script:
-    - source /applications/VIRTUAL/bin/activate
-    - cd /applications/investment-manager
+    - source /applications/VIRTUAL_INVESTMENT/bin/activate
+    - cd /applications/live-investment-manager
     - pip install -r requirements.txt
     # DB sync
     - python manage.py makemigrations crypto investment
