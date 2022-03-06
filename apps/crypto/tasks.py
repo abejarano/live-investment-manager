@@ -13,6 +13,7 @@ def handle_price():
     binance = BinanceClient()
 
     for crypto in cryptos:
-        response = binance.ticker_price(crypto.name + "USDT")
-        crypto.price = Decimal(response['price'])
+        response = binance.ticker_24hr(crypto.name + "USDT")
+        crypto.price = Decimal(response['lastPrice'])
+        crypto.price_change = Decimal(response['priceChangePercent'])
         crypto.save()
