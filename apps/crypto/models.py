@@ -6,7 +6,7 @@ from django.db import models
 class Crypto(models.Model):
     name = models.CharField(max_length=10, null=False, blank=False, verbose_name='Activo financiero')
     price = models.DecimalField(max_digits=19, decimal_places=8, verbose_name='Precio de mercado')
-    price_change = models.DecimalField(max_digits=19, decimal_places=8, verbose_name='Porcentaje de cambios')
+    price_change = models.DecimalField(max_digits=19, decimal_places=8, verbose_name='Cambio 24h')
     status = models.BooleanField(default=True, verbose_name='Activo?')
 
     def __str__(self):

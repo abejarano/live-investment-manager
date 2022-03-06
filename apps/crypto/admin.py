@@ -6,4 +6,4 @@ from apps.crypto.models import Crypto
 
 @admin.register(Crypto)
 class AdminCrypto(admin.ModelAdmin):
-    list_display = ['name', 'price', 'status']
+    list_display = ['name', 'price', 'price_change', 'status']
