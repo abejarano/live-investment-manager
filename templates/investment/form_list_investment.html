@@ -1,0 +1,29 @@
+{% extends "admin/change_list.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+{{ adminchart_chartjs_config|json_script:"adminchart-chartjs-config" }}
+{% endblock %}
+
+{% block pretitle %}
+{{ block.super }}
+<p>
+    <b>Total Invertido:</b> {{capital}}
+</p>
+<p>
+    <b>ROI:</b> {{ROI}}
+</p>
+{% if capital_actual < capital %}
+<p style="color: red">
+    <b>Capital Actual:</b> {{capital_actual}}
+</p>
+{% else %}
+    <p>
+        <b>Capital Actual:</b> {{capital_actual}}
+    </p>
+{% endif %}
+
+<div id="admincharts"></div>
+
+<br>
+{% endblock %}

@@ -45,13 +45,18 @@ class Investment(models.Model):
         roi = round(current_balance - self.amount, 2)
 
         if roi < 0:
-            return mark_safe('<b style = "color: red">'+str(roi)+'</b>')
+            return mark_safe('<b style = "color: red">' + str(roi) + '</b>')
 
-        return mark_safe('<b style = "color: green">'+str(roi)+'</b>')
+        return mark_safe('<b style = "color: green">' + str(roi) + '</b>')
 
     def precio_actual(self):
         return str(self.crypto.price)
 
+    def delete(self, *args, **kwargs):
+        super(Investment, self).delete(*args, **kwargs)
+        capital = Capital.objects.all().first()
+        capital.capital = capital.capital - self.amount
+        capital.update()
 
     class Meta:
         db_table = 'tb_investments'
