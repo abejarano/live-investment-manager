@@ -47,6 +47,7 @@ class AdminInvestment(AdminChartMixin, admin.ModelAdmin):
         totals = []
         aux = {}
         self.roi = 0
+        self.capital = 0
         for crypto_query in queryset:
             amount = crypto_query.amount
             if crypto_query.crypto.name in aux.keys():
