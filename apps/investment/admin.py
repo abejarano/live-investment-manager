@@ -14,6 +14,7 @@ from apps.investment.models import Investment, Capital
 @admin.register(Investment)
 class AdminInvestment(AdminChartMixin, admin.ModelAdmin):
     roi = 0
+    capital = 0
     list_display = ['crypto', 'price_crypto', 'precio_actual', 'amount', 'amount_crypto', 'ROI']
     add_form_template = 'investment/form_add_investment.html'
     change_list_template = 'investment/form_list_investment.html'
@@ -29,40 +30,14 @@ class AdminInvestment(AdminChartMixin, admin.ModelAdmin):
     ]
 
     def changelist_view(self, request, extra_context=None):
-        # extra_context = extra_context or {}
-        # capital = Capital.objects.get(user=request.user.id)
-        # extra_context['capital'] = capital.capital
-        #
-        # print(self.RIO )
-        #
-        # return super(AdminInvestment, self).changelist_view(request, extra_context)
-
-        capital = Capital.objects.get(user=request.user.id)
 
         response = super().changelist_view(request, extra_context)
         response.context_data['ROI'] = round(self.roi, 2)
 
-        response.context_data['capital'] = round(capital.capital, 2)
-        response.context_data['capital_actual'] = round(capital.capital + self.roi, 2)
+        response.context_data['capital'] = round(self.capital, 2)
+        response.context_data['capital_actual'] = round(self.capital + self.roi, 2)
 
         return response
-
-    def save_model(self, request, obj, form, change):
-        obj.user = User.objects.get(username=request.user)
-
-        if not change:
-            try:
-                capital = Capital.objects.get(user__username=request.user)
-                capital.capital = capital.capital + obj.amount
-                capital.save()
-
-            except ObjectDoesNotExist:
-                Capital(
-                    user=obj.user,
-                    capital=obj.amount
-                ).save()
-
-        obj.save()
 
     def get_list_chart_data(self, queryset):
         if not queryset:
@@ -79,6 +54,7 @@ class AdminInvestment(AdminChartMixin, admin.ModelAdmin):
 
             current_balance = crypto_query.amount_crypto * crypto_query.crypto.price
             self.roi = self.roi + (current_balance - crypto_query.amount)
+            self.capital = self.capital + crypto_query.amount
 
             aux[crypto_query.crypto.name] = amount
 
