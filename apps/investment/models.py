@@ -19,11 +19,11 @@ class Capital(models.Model):
 
 
 class Investment(models.Model):
-    amount = models.DecimalField(max_digits=19, decimal_places=5, verbose_name='Monto invertido (USD)')
+    amount = models.DecimalField(max_digits=19, decimal_places=8, verbose_name='Monto invertido (USD)')
     amount_crypto = models.DecimalField(max_digits=19, decimal_places=8, verbose_name='Cantidad de cripto')
     price_crypto = models.DecimalField(
         max_digits=19,
-        decimal_places=5,
+        decimal_places=8,
         help_text='Precio al que se compro la cripto',
         verbose_name='Precio de compra'
     )
