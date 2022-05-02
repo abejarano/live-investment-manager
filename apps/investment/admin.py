@@ -74,3 +74,8 @@ class AdminInvestment(AdminChartMixin, admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.user = User.objects.get(username=request.user)
         obj.save()
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        queryset = queryset.filter(user=request.user)
+        return queryset
