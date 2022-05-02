@@ -70,3 +70,7 @@ class AdminInvestment(AdminChartMixin, admin.ModelAdmin):
                  "backgroundColor": ["#af0cb7", "#ff8c00", "#5000ff", "#09aec8", "#15b700"]},
             ],
         }
+
+    def save_model(self, request, obj, form, change):
+        obj.user = User.objects.get(username=request.user)
+        obj.save()
