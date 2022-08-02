@@ -1,1 +1,0 @@
-celery -A crypto_investment worker --beat --scheduler django --loglevel=info
