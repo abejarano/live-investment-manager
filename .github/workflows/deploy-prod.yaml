@@ -17,12 +17,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: get env file
-        run: |
-          cat <<EOF > .env
-          "${{ secrets.APP_ENV_PROD }}"
-          EOF
-          echo "cat .env"
-          cat .env
+        uses: "finnp/create-file-action@master"
+        env:
+          FILE_NAME: ".env"
+          FILE_DATA: ${{ secrets.APP_ENV_PROD }}
       - name: Set up Python 3.9
         uses: actions/setup-python@v2
         with:
@@ -53,12 +51,10 @@ jobs:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
       - name: Create file environment
-        run: |
-          cat <<EOF > .env
-          "${{ secrets.APP_ENV_PROD }}"
-          EOF
-          echo "cat .env"
-          cat .env
+        uses: "finnp/create-file-action@master"
+        env:
+          FILE_NAME: ".env"
+          FILE_DATA: ${{ secrets.APP_ENV_PROD }}
       - name: Deploy to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0
