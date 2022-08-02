@@ -27,5 +27,3 @@ Thumbs.db
 /contenedores/
 migrations
 media/facturas_pdf
-.env
-

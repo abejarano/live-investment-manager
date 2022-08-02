@@ -1,6 +1,7 @@
-version: '3.8'
+version: '3.9'
 services:
   postgres:
+    container_name: postgres_crypto
     restart: always
     image: postgres
     environment:
@@ -12,49 +13,30 @@ services:
     ports:
       - "5432:5432"
 
-  redis:
-    image: redis
-    restart: always
-    ports:
-      - "6379:6379"
-    volumes:
-      - redisdata:/var/lib/redis/data
-
   investment:
+    container_name: investment_crypto
+    tty: true
     restart: always
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: investment_crypto
     env_file: .env
     environment:
       DJANGO_SUPERUSER_USERNAME: admin
       DJANGO_SUPERUSER_PASSWORD: sekret1
       DJANGO_SUPERUSER_EMAIL: admin@example.com
-    command: /app/start-server.sh
+    command: python /app/manage.py runserver 0.0.0.0:8080
     volumes:
-      - web-django:/app
+      - ./:/app
       - web-static:/app/static
-    expose:
-      - "8000"
+    ports:
+      - "8080:8080"
     links:
       - postgres:postgres
-      - redis:redis
     depends_on:
       - postgres
-      - redis
-
-  nginx:
-    restart: always
-    build: ./nginx/
-    ports:
-      - "80:80"
-    volumes:
-      - web-static:/app/static
-    links:
-      - investment:investment
-
 
 volumes:
-  postgres_data:
-  web-django:
   web-static:
   pgdata:
-  redisdata:

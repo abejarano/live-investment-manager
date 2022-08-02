@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
-from decouple import config
+from urllib.parse import urlparse
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,11 +24,27 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-%uhxtptwvubr=-a9kp8r*0fbuk6404em&t4v+2!^dz)f6)b4ef'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEV', default=False, cast=bool)
-DEV = config('DEV', default=False, cast=bool)
+env = environ.Env(
+    DEV=(bool, True),
+)
 
-ALLOWED_HOSTS = ['*']
+env_file = os.path.join(BASE_DIR, '.env')
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = env('DEV')
+DEV = env('DEV')
+
+# SECURITY WARNING: It's recommended that you use this when
+# running in production. The URL will be known once you first deploy
+# to Cloud Run. This code takes the URL and converts it to both these settings formats.
+CLOUDRUN_SERVICE_URL = env("CLOUDRUN_SERVICE_URL", default=None)
+if CLOUDRUN_SERVICE_URL and DEV == False:
+    ALLOWED_HOSTS = [urlparse(CLOUDRUN_SERVICE_URL).netloc]
+    CSRF_TRUSTED_ORIGINS = [CLOUDRUN_SERVICE_URL]
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+else:
+    ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -39,7 +56,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_celery_beat',
     'admincharts',
     'apps.crypto',
     'apps.investment',
@@ -82,11 +98,11 @@ WSGI_APPLICATION = 'crypto_investment.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': config('POSTGRES_DB'),
-        'USER': config('POSTGRES_USER'),
-        'PASSWORD': config('POSTGRES_PASSWORD'),
-        'HOST': config('POSTGRES_HOST'),
-        'PORT': config('POSTGRES_PORT')
+        'NAME': env('POSTGRES_DB'),
+        'USER': env('POSTGRES_USER'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
+        'HOST': env('POSTGRES_HOST'),
+        'PORT': env('POSTGRES_PORT')
     }
 }
 
@@ -129,47 +145,6 @@ USE_TZ = True
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-CELERY_BROKER_URL = 'redis://'+config('REDIS_HOST')+':'+config('REDIS_PORT')+''
-CELERY_RESULT_BACKEND = 'redis://'+config('REDIS_HOST')+':'+config('REDIS_PORT')+''
-
 STATIC_URL = '/static/'
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'static'),
-# )
-# print(STATICFILES_DIRS)
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
-if not DEV:
-
-    LOGGING = {
-        'version': 1, 'disable_existing_loggers': False,
-        'handlers': {  # Include the default django email handler for errors
-            # This is what you'd get without configuring logging at all.
-            'mail_admins': {
-                'class': 'django.utils.log.AdminEmailHandler',
-                'level': 'ERROR',
-                # But the emails are plain text by default - HTML is nicer
-                'include_html': True,
-            },
-            # Log to a text file that can be rotated by logrotate
-            'logfile': {
-                'class': 'logging.handlers.WatchedFileHandler', 'filename': '/applications/investment.log'
-            },
-        },
-        'loggers': {  # Again, default Django configuration to email unhandled exceptions
-            'django.request': {
-                'handlers': ['mail_admins'], 'level': 'ERROR',
-                'propagate': True,
-            },  # Might as well log any errors anywhere else in Django
-            'django': {
-                'handlers': ['logfile'], 'level': 'ERROR',
-                'propagate': False,
-            },
-            # Your own app - this assumes all your logger names start with "myapp."
-            'myapp': {
-                'handlers': ['logfile'],
-                'level': 'WARNING',  # Or maybe INFO or DEBUG
-                'propagate': False},
-        },
-    }
