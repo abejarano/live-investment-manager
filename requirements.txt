@@ -4,3 +4,4 @@ django-admincharts
 psycopg2-binary
 gunicorn
 python-decouple
+whitenoise
