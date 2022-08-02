@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-%uhxtptwvubr=-a9kp8r*0fbuk6404em&t4v+2!^dz)f6)b4ef
 # SECURITY WARNING: don't run with debug turned on in production!
 
 DEBUG = config('DEV', default=False, cast=bool)
-DEV = config('DEV', default=False, cast=bool)
+DEV = DEBUG
 
 # SECURITY WARNING: It's recommended that you use this when
 # running in production. The URL will be known once you first deploy
