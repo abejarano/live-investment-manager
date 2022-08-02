@@ -30,6 +30,8 @@ env = environ.Env(
 
 env_file = os.path.join(BASE_DIR, '.env')
 
+env.read_env(env_file)
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEV')
 DEV = env('DEV')
