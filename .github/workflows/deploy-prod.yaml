@@ -1,9 +1,9 @@
-name: Deploy to Cloud Run in test environment
+name: Deploy to Cloud Run in prod environment
 
 on:
   push:
     branches:
-      - main
+      - master
 
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT }}
