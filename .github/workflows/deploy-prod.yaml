@@ -19,7 +19,7 @@ jobs:
       - name: get env file
         env:
           ENVIRONMENT: ${{ secrets.APP_ENV }}
-        run: echo "$ENVIRONMENT" > PATH//.env
+        run: echo "$ENVIRONMENT" > PATH/.env
       - name: Set up Python 3.9
         uses: actions/setup-python@v2
         with:
@@ -52,7 +52,7 @@ jobs:
       - name: Create file environment
         env:
           ENVIRONMENT: ${{ secrets.APP_ENV }}
-        run: echo "$ENVIRONMENT" > PATH//.env
+        run: echo "$ENVIRONMENT" > PATH/.env
       - name: Deploy to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0
