@@ -17,8 +17,12 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: get env file
-        shell: bash
-        run: echo "${{ secrets.APP_ENV_PROD }}" > "$(pwd)/.env" cat .env
+        run: |
+          cat <<EOF > .env
+          "${{ secrets.APP_ENV_PROD }}"
+          EOF
+          echo "cat .env"
+          cat .env
       - name: Set up Python 3.9
         uses: actions/setup-python@v2
         with:
