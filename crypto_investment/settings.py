@@ -34,6 +34,8 @@ env_file = os.path.join(BASE_DIR, '.env')
 DEBUG = env('DEV')
 DEV = env('DEV')
 
+print(DEV)
+
 # SECURITY WARNING: It's recommended that you use this when
 # running in production. The URL will be known once you first deploy
 # to Cloud Run. This code takes the URL and converts it to both these settings formats.
