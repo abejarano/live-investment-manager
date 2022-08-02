@@ -1,4 +1,4 @@
-Django~=3.2.9
+Django
 binance-connector
 django-admincharts
 psycopg2-binary
