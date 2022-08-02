@@ -9,7 +9,6 @@ env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT }}
   SERVICE: ${{ secrets.GCP_SERVICE_NAME }}
   REGION: ${{ secrets.GCP_SERVICE_REGION }}
-  ENVIRONMENT: ${{ secrets.APP_ENV_PROD }}
 
 jobs:
   migrate:
@@ -18,12 +17,8 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: get env file
-        run: echo "The ENVIRONMENT is:${{env.ENVIRONMENT}}" |
-          cat <<EOF > .env
-          "${{ env.ENVIRONMENT }}"
-          EOF
-          echo "cat .env"
-          cat .env
+        shell: bash
+        run: echo "${{ secrets.APP_ENV_PROD }}" > "$(pwd)/.env"
       - name: Set up Python 3.9
         uses: actions/setup-python@v2
         with:
@@ -56,7 +51,7 @@ jobs:
       - name: Create file environment
         run: |
           cat <<EOF > .env
-          "${{ env.ENVIRONMENT }}"
+          "${{ secrets.APP_ENV_PROD }}"
           EOF
           echo "cat .env"
           cat .env
