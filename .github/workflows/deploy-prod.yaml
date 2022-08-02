@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: get env file
-        run: |
+        run: echo "The ENVIRONMENT is:${{env.ENVIRONMENT}}" |
           cat <<EOF > .env
           "${{ env.ENVIRONMENT }}"
           EOF
