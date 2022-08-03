@@ -26,10 +26,9 @@ services:
       DJANGO_SUPERUSER_USERNAME: admin
       DJANGO_SUPERUSER_PASSWORD: sekret1
       DJANGO_SUPERUSER_EMAIL: admin@example.com
-    command: python /app/manage.py runserver 0.0.0.0:8080
+    command: gunicorn --bind 0.0.0.0:8080 --workers 2 --threads 8 --timeout 0 crypto_investment.wsgi:application
     volumes:
       - ./:/app
-      - web-static:/app/static
     ports:
       - "8080:8080"
     links:

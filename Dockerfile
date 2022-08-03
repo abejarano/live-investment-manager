@@ -25,10 +25,7 @@ RUN pip install -r /app/requirements.txt
 
 RUN sed -i 's/\r$//g' $HOME/entrypoint.sh
 RUN chmod +x $HOME/entrypoint.sh
-
-
-STOPSIGNAL SIGTERM
-ENTRYPOINT ["/app/entrypoint.sh"]
+RUN sh $HOME/entrypoint.sh
 
 CMD gunicorn --bind 0.0.0.0:8080 --workers 2 --threads 8 --timeout 0 crypto_investment.wsgi:application
 
