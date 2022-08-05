@@ -15,7 +15,7 @@ from apps.investment.models import Investment, Capital
 class AdminInvestment(AdminChartMixin, admin.ModelAdmin):
     roi = 0
     capital = 0
-    list_display = ['crypto', 'price_crypto', 'precio_actual', 'amount', 'amount_crypto', 'ROI']
+    list_display = ['crypto', 'price_crypto', 'precio_actual', 'amount', 'amount_crypto', 'ROI', 'GRAFICO']
     add_form_template = 'investment/form_add_investment.html'
     change_list_template = 'investment/form_list_investment.html'
 

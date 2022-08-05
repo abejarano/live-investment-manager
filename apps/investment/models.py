@@ -52,6 +52,13 @@ class Investment(models.Model):
     def precio_actual(self):
         return str(self.crypto.price)
 
+    def GRAFICO(self):
+        return mark_safe(
+            '<a target="_blank" href="https://www.binance.com/en/trade/' + self.crypto.name + '_USDT?theme=dark&type=spot">'
+                '<img src="https://bin.bnbstatic.com/static/images/common/favicon.ico" />'
+            '</a>'
+        )
+
     def delete(self, *args, **kwargs):
         super(Investment, self).delete(*args, **kwargs)
         capital = Capital.objects.all().first()
