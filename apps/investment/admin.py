@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 
 from apps.investment.forms import FormInvestment
-from apps.investment.models import Investment, Capital
+from apps.investment.models import Investment, Capital, InvestmentReturnProjection
 
 
 @admin.register(Investment)
@@ -79,3 +79,8 @@ class AdminInvestment(AdminChartMixin, admin.ModelAdmin):
         queryset = super().get_queryset(request)
         queryset = queryset.filter(user=request.user)
         return queryset
+
+
+@admin.register(InvestmentReturnProjection)
+class AdminInvestmentReturnProjection(admin.ModelAdmin):
+    list_display = ['crypto', 'Monto_invertido', 'estimated_price', 'rio', 'execution_date']

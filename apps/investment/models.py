@@ -55,8 +55,8 @@ class Investment(models.Model):
     def GRAFICO(self):
         return mark_safe(
             '<a target="_blank" href="https://www.binance.com/en/trade/' + self.crypto.name + '_USDT?theme=dark&type=spot">'
-                '<img src="https://bin.bnbstatic.com/static/images/common/favicon.ico" />'
-            '</a>'
+                                                                                              '<img src="https://bin.bnbstatic.com/static/images/common/favicon.ico" />'
+                                                                                              '</a>'
         )
 
     def delete(self, *args, **kwargs):
@@ -69,3 +69,38 @@ class Investment(models.Model):
         db_table = 'tb_investments'
         verbose_name = 'Inversiones'
         verbose_name_plural = 'Inversiones'
+
+
+class InvestmentReturnProjection(models.Model):
+    investment = models.OneToOneField(
+        Investment,
+        related_name='return_projection',
+        on_delete=models.CASCADE
+    )
+    estimated_price = models.DecimalField(
+        max_digits=19,
+        decimal_places=8,
+        help_text='Precio que se espera que la inversión alcance a la fecha estiamda.',
+        verbose_name='Precio estimado'
+    )
+    execution_date = models.DateField(
+        null=False, blank=False,
+        verbose_name='Fecha estimada'
+    )
+
+    rio = models.DecimalField(
+        max_digits=19,
+        decimal_places=8,
+        verbose_name='ROI'
+    )
+
+    def crypto(self):
+        return self.investment.crypto
+
+    def Monto_invertido(self):
+        return str(self.investment.amount)
+
+    class Meta:
+        db_table = 'tb_projection'
+        verbose_name = 'Proyección'
+        verbose_name_plural = 'Proyecciones'
