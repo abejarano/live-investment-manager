@@ -9,11 +9,10 @@ from binance.spot import Spot as BinanceClient
 
 class Price(TemplateView):
 
+
     def get(self, request, *args, **kwargs):
         cryptos = Crypto.objects.filter(status=True, integration_binance=True)
-
         binance = BinanceClient()
-
         for crypto in cryptos:
             response = binance.ticker_24hr(crypto.name + "USDT")
             crypto.price = Decimal(response['lastPrice'])
